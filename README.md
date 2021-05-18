@@ -114,7 +114,7 @@ pm.in_range(49,27,102, dims=2) # => True
     title        = {{pyMorton: Multi-dimensional indexing using Morton space filling curves.}},
     month        = may,
     year         = 2021,
-#    doi          = {10.5281/zenodo.4771019},
+    doi          = {10.5281/zenodo.4771019},
     version      = {0.0.1},
     publisher    = {Zenodo},
     url          = {https://github.com/rmrschub/pyMorton}
