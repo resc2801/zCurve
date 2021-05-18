@@ -6,8 +6,7 @@ pyMorton is a Python module with methods to efficiently map multidimensional dat
 This mapping is commonly known as Z-order, Lebesgue curve, Morton space filling curve, Morton order or Morton code.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/3/30/Z-curve.svg)
-
-*by David Eppstein, 2008*
+*Image by David Eppstein, 2008*
 
 The Morton code of a multi-dimensional data point is calculated by bitwise interlacing the binary representations of its coordinate values.
 
@@ -89,12 +88,9 @@ data_points == par_deinterlaces(morton_codes)
 ````
 
 ### Range searching   
-.center[
-![](https://i.postimg.cc/qRQfSY80/tropf-figure-9.png)](https://postimg.cc/YG4ymdny)
-.caption[
-*Tropf, Herbert, and Helmut Herzog. "Multidimensional Range Search in Dynamically Balanced Trees." ANGEWANDTE INFO. 2 (1981): 71-77.*
-]
-]
+![](https://i.postimg.cc/qRQfSY80/tropf-figure-9.png)
+*Image by Tropf and Herzog, 1981*
+
 
 When range searching, we can prune the search space by calculating `BIGMIN` (aka "GetNextZ-address") and `LITMAX` (aka "GetPrevZ-address") values.     
 ```python
