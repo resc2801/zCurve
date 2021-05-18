@@ -83,8 +83,8 @@ data_points = [(randrange(0, max_val), randrange(0, max_val), randrange(0, max_v
 ```` 
 we can speed up things by using `par_interlace` and `par_deinterlace`
 ```python
-morton_codes = pm.par_interlace(data_points)
-data_points == par_deinterlaces(morton_codes)
+morton_codes = pm.par_interlace(data_points, dims=3, bits_per_dim=16)
+data_points == par_deinterlaces(morton_codes, dims=3)
 ````
 
 ### Range searching   
