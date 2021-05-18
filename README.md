@@ -1,7 +1,7 @@
-# pyMorton
+# zCurve
 [![DOI](https://zenodo.org/badge/367796024.svg)](https://zenodo.org/badge/latestdoi/367796024)
 
-pyMorton is a Python module with methods to efficiently map multidimensional data to a single dimension while preserving locality of the data points.
+zCurve is a Python module with methods to efficiently map multidimensional data to a single dimension while preserving locality of the data points.
 
 This mapping is commonly known as Z-order, Lebesgue curve, Morton space filling curve, Morton order or Morton code.
 
@@ -10,7 +10,7 @@ This mapping is commonly known as Z-order, Lebesgue curve, Morton space filling 
 
 The Morton code of a multi-dimensional data point is calculated by bitwise interlacing the binary representations of its coordinate values.
 
-pyMorton provides two functions for handling the encoding and decoding of data points with _arbitrary_ dimensionality and _arbitrary_ coordinate size:
+zCurve provides two functions for handling the encoding and decoding of data points with _arbitrary_ dimensionality and _arbitrary_ coordinate size:
  
 ```python
 interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> int
@@ -19,7 +19,7 @@ interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> int
 deinterlace(code_point: int, dims: int = 3) -> List[int]
 ```
 
-When handling large multi-dimensional dataset (n > 10.000), pyMorton offers some simple  but convenient means of parallelizing the Morton encoding and decoding:
+When handling large multi-dimensional dataset (n > 10.000), zCurve offers some simple  but convenient means of parallelizing the Morton encoding and decoding:
  
 ```python
 par_interlace(data_points: List[List[int]], dims: int = None, bits_per_dim: int = None) -> List[int]
@@ -29,7 +29,7 @@ par_deinterlace(code_points: List[int], dims: int = 3) -> List[List[int]]
 ```
 
 Given the Morton codes of a multi-dimensional dataset, we can perform multi-dimensional range search using only a one-dimensional data structure. 
-For range searching, pyMorton offers two functions for calculating the necesaary `LITMAX` and `BIGMIN` values:
+For range searching, zCurve offers two functions for calculating the necesaary `LITMAX` and `BIGMIN` values:
 ```python
 prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> int
 ```
@@ -45,29 +45,29 @@ and it makes heavy use of the excellent [gmpy2 module](https://gmpy2.readthedocs
 
 ## Installation
 ```bash
-pip install pyMorton
+pip install zCurve
 ```
 
 ## Usage
 
 ### Basics 
 ````python
-import pyMorton as pm 
+import zCurve as z 
 ````
 imports the module.
 ```python
-code = pm.interlace(2,16,8)
+code = z.interlace(2,16,8)
 ```
 interlaces the 3D data point `(2,16,8)` into Morton code point `10248`.
 
 When explicitly specify dimensionality and bits per dimension of your data point 
 ```python
-code = pm.interlace(2,16,8, dims=3, bits_per_dim=5)
+code = z.interlace(2,16,8, dims=3, bits_per_dim=5)
 ```
 performance will benefit substantially. 
 
 ```python
-pm.deinterlace(4711)
+z.deinterlace(4711)
 ```
 deinterlaces the Morton code point `4711` into the 3D data point `(29,1,3)`.
 
@@ -83,8 +83,8 @@ data_points = [(randrange(0, max_val), randrange(0, max_val), randrange(0, max_v
 ```` 
 we can speed up things by using `par_interlace` and `par_deinterlace`
 ```python
-morton_codes = pm.par_interlace(data_points, dims=3, bits_per_dim=16)
-data_points == par_deinterlaces(morton_codes, dims=3)
+morton_codes = z.par_interlace(data_points, dims=3, bits_per_dim=16)
+data_points == z.par_deinterlaces(morton_codes, dims=3)
 ````
 
 ### Range searching   
@@ -94,24 +94,24 @@ data_points == par_deinterlaces(morton_codes, dims=3)
 
 When range searching, we can prune the search space by calculating `BIGMIN` (aka "GetNextZ-address") and `LITMAX` (aka "GetPrevZ-address") values.     
 ```python
-point = pm.interlace(6, 3, dims=2)  # => 30
-rmin = pm.interlace(5, 3, dims=2)   # => 27
-rmax = pm.interlace(10, 5, dims=2)  # => 102
+point = z.interlace(6, 3, dims=2)  # => 30
+rmin = z.interlace(5, 3, dims=2)   # => 27
+rmax = z.interlace(10, 5, dims=2)  # => 102
 
-BIGMIN = pm.next_morton(point, rmin, rmax, dims=2) # => 31
-LITMAX = pm.prev_morton(point, rmin, rmax, dims=2) # => 27
+BIGMIN = z.next_morton(point, rmin, rmax, dims=2) # => 31
+LITMAX = z.prev_morton(point, rmin, rmax, dims=2) # => 27
 ```
 In addition, we can easily check if a given Morton code point is within a specified range
 ```python 
-pm.in_range(58,27,102, dims=2) # => False
-pm.in_range(49,27,102, dims=2) # => True
+z.in_range(58,27,102, dims=2) # => False
+z.in_range(49,27,102, dims=2) # => True
 ```
  
 ## Citation
 ```bibtex
-@misc{rmrschub_2021_pyMorton,
+@misc{rmrschub_2021_zCurve,
     author       = {René Schubotz},
-    title        = {{pyMorton: Multi-dimensional indexing using Morton space filling curves.}},
+    title        = {{zCurve: Multi-dimensional indexing using Morton space filling curves.}},
     month        = may,
     year         = 2021,
     doi          = {10.5281/zenodo.4771019},

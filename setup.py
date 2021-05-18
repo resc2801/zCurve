@@ -9,16 +9,16 @@ except(IOError, ImportError):
     long_description_content_type = 'text/markdown'
 
 setup(
-    name='pyMorton',
+    name='zCurve',
     version='0.0.1',
-    description='pyMorton maps multidimensional data to one dimension while preserving locality of the data points.',
+    description='zCurve maps multidimensional data to one dimension while preserving locality of the data points.',
     long_description=long_description,
     long_description_content_type=long_description_content_type,
     url='https://github.com/rmrschub/pyMorton',
     author='René Schubotz',
     author_email='rene.schubotz@dfki.de',
     license='CC BY-NC-SA 4.0',
-    packages=['pyMorton'],
+    packages=['zCurve'],
     install_requires=['typing',
                       'gmpy2'],
 
