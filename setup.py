@@ -10,7 +10,7 @@ except(IOError, ImportError):
 
 setup(
     name='zCurve',
-    version='0.0.1',
+    version='0.0.2',
     description='zCurve maps multidimensional data to one dimension while preserving locality of the data points.',
     long_description=long_description,
     long_description_content_type=long_description_content_type,
