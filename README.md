@@ -1,15 +1,6 @@
 # pyMorton
 [![DOI](https://zenodo.org/badge/367796024.svg)](https://zenodo.org/badge/latestdoi/367796024)
 
-- [pyMorton](#pymorton)
-  * [Installation](#installation)
-  * [Usage](#usage)
-    + [Basics](#basics)
-    + [Parallel interlacing/deinterlacing](#parallel-interlacing-deinterlacing)
-    + [Range searching](#range-searching)
-  * [Citation](#citation)
-  * [License](#license)
-
 pyMorton is a Python module with methods to efficiently map multidimensional data to a single dimension while preserving locality of the data points.
 
 This mapping is commonly known as Z-order, Lebesgue curve, Morton space filling curve, Morton order or Morton code.
