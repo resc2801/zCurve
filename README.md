@@ -11,18 +11,30 @@ The Morton code of a multi-dimensional data point is calculated by bitwise inter
 
 pyMorton provides two functions for handling the encoding and decoding of data points with _arbitrary_ dimensionality and _arbitrary_ coordinate size:
  
-- `interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> int`{:.language-python}
-- `deinterlace(code_point: int, dims: int = 3) -> List[int]`{:.language-python}
+```python
+interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> int
+```
+```python
+deinterlace(code_point: int, dims: int = 3) -> List[int]
+```
 
 When handling large multi-dimensional dataset (n > 10.000), pyMorton offers some simple  but convenient means of parallelizing the Morton encoding and decoding:
  
-- `par_interlace(data_points: List[List[int]], dims: int = None, bits_per_dim: int = None) -> List[int]`{:.language-python}
-- `par_deinterlace(code_points: List[int], dims: int = 3) -> List[List[int]]`{:.language-python}
+```python
+par_interlace(data_points: List[List[int]], dims: int = None, bits_per_dim: int = None) -> List[int]
+```
+```python
+par_deinterlace(code_points: List[int], dims: int = 3) -> List[List[int]]
+```
 
 Given the Morton codes of a multi-dimensional dataset, we can perform multi-dimensional range search using only a one-dimensional data structure. 
 For range searching, pyMorton offers two functions for calculating the necesaary `LITMAX` and `BIGMIN` values:
-- `prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> int`{:.language-python} 
-- `next_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> int`{:.language-python}
+```python
+prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> int
+```
+```python 
+next_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> int
+```
 
 This implementation is based on the following paper 
 
