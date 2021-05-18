@@ -106,71 +106,7 @@ In addition, we can easily check if a given Morton code point is within a specif
 pm.in_range(58,27,102, dims=2) # => False
 pm.in_range(49,27,102, dims=2) # => True
 ```
-
-## Performance
-Interlacing 10.000 random three-dimensional data points with 8 bits per coordinate value
-```python
-import cProfile
-from random import randrange
-from pyMorton import interlace
-    
-bit_size = 8
-max_val = 2 ** bit_size - 1
-no_samples = 10**5
-values = [(randrange(0, max_val), randrange(0, max_val), randrange(0, max_val)) for i in range(no_samples)]
-cProfile.run("[interlace(x,y,z, dims=3, bits_per_dim=8) for x,y,z in values]")
-```
-runs in
-```
-         200004 function calls in 0.124 seconds
-   Ordered by: standard name
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.021    0.021    0.123    0.123 <string>:1(<listcomp>)
-        1    0.001    0.001    0.124    0.124 <string>:1(<module>)
-   100000    0.095    0.000    0.102    0.000 pyMorton.py:6(interlace)
-        1    0.000    0.000    0.124    0.124 {built-in method builtins.exec}
-   100000    0.007    0.000    0.007    0.000 {built-in method gmpy2.xmpz}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-```
-
-Interlacing 10.000 random three-dimensional data points with 128 bits per coordinate value
-```python
-import cProfile
-from random import randrange
-from pyMorton import interlace
-    
-bit_size = 128
-max_val = 2 ** bit_size - 1
-no_samples = 10**5
-values = [(randrange(0, max_val), randrange(0, max_val), randrange(0, max_val)) for i in range(no_samples)]
-cProfile.run("[interlace(x,y,z, dims=3, bits_per_dim=8) for x,y,z in values]")
-```
-runs in 
-```
-         200004 function calls in 0.134 seconds
-   Ordered by: standard name
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.023    0.023    0.133    0.133 <string>:1(<listcomp>)
-        1    0.001    0.001    0.134    0.134 <string>:1(<module>)
-   100000    0.103    0.000    0.110    0.000 pyMorton.py:6(interlace)
-        1    0.000    0.000    0.134    0.134 {built-in method builtins.exec}
-   100000    0.007    0.000    0.007    0.000 {built-in method gmpy2.xmpz}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-```
-
-Interlacing 1.000.000 random three-dimensional data points with 8 bits per coordinate value:
-```
-         20000004 function calls in 12.419 seconds
-   Ordered by: standard name
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    2.144    2.144   12.317   12.317 <string>:1(<listcomp>)
-        1    0.101    0.101   12.419   12.419 <string>:1(<module>)
- 10000000    9.509    0.000   10.173    0.000 pyMorton.py:6(interlace)
-        1    0.000    0.000   12.419   12.419 {built-in method builtins.exec}
- 10000000    0.664    0.000    0.664    0.000 {built-in method gmpy2.xmpz}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-```
-
+ 
 ## Citation
 ```bibtex
 @misc{rmrschub_2021_pyMorton,
