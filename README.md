@@ -1,5 +1,5 @@
 # pyMorton
-#[![DOI](https://zenodo.org/badge/367291041.svg)](https://zenodo.org/badge/latestdoi/367291041)
+[![DOI](https://zenodo.org/badge/367796024.svg)](https://zenodo.org/badge/latestdoi/367796024)
 
 pyMorton is a Python module with methods to efficiently map multidimensional data to a single dimension while preserving locality of the data points.
 
@@ -114,7 +114,7 @@ pm.in_range(49,27,102, dims=2) # => True
     title        = {{pyMorton: Multi-dimensional indexing using Morton space filling curves.}},
     month        = may,
     year         = 2021,
-#    doi          = {10.5281/zenodo.4761443},
+#    doi          = {10.5281/zenodo.4771019},
     version      = {0.0.1},
     publisher    = {Zenodo},
     url          = {https://github.com/rmrschub/pyMorton}
