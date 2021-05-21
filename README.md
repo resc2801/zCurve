@@ -114,8 +114,8 @@ z.in_range(49,27,102, dims=2) # => True
     title        = {{zCurve: Multi-dimensional indexing using Morton space filling curves.}},
     month        = may,
     year         = 2021,
-    doi          = {10.5281/zenodo.4771066},
-    version      = {0.0.2},
+    doi          = {10.5281/zenodo.4777584},
+    version      = {0.0.4},
     publisher    = {Zenodo},
     url          = {https://github.com/rmrschub/zCurve}
     }
