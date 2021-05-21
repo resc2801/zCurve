@@ -18,7 +18,6 @@ def interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> i
     """
     dims = len(data_point) if dims is None else dims
     bits_per_dim = max(1, *data_point).bit_length() if bits_per_dim is None else bits_per_dim
-    #    bits_per_dim = max(1, max(data_point).bit_length()) if bits_per_dim is None else bits_per_dim
     total_bits = dims * bits_per_dim
     c = xmpz()
 
@@ -46,7 +45,7 @@ def par_interlace(data_points: List[List[int]], dims: int = None, bits_per_dim: 
     return code_points
 
 
-def deinterlace(code_point: int, dims: int = 3) -> List[int]:
+def deinterlace(code_point: int, dims: int = 3, total_bits: int = None) -> List[int]:
     """
     Deinterlace given 1D Morton code_point into a multi-dimensional data point.
 
@@ -57,17 +56,11 @@ def deinterlace(code_point: int, dims: int = 3) -> List[int]:
     :return: List[int]
         A multi-dimensional data point.
     """
-    total_bits = code_point.bit_length() + (dims - code_point.bit_length() % dims)
-    c = xmpz(code_point)
-    data_point = [None] * dims
-
-    for i in range(0, dims):
-        data_point[i] = int(c[i:total_bits:dims])
-
-    return data_point
+    total_bits = code_point.bit_length() + (dims - code_point.bit_length() % dims) if total_bits is None else total_bits
+    return [int(xmpz(code_point)[i:total_bits:dims]) for i in range(0, dims)]
 
 
-def prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> int:
+def prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3, total_bits: int = None) -> int:
     """
     Return 1D Morton code point previous to given 1D Morton code_point within range [rmin_code, rmax_code].
 
@@ -79,11 +72,14 @@ def prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) 
         The maximum range 1D Morton code point
     :param dims:
         The dimensionality of the underlying data space.
+    :param total_bits: int, optional
+        The total bitsize of the Morton encoding.
     :return: int
         The 1D Morton code point previous to code_point within range [rmin_code, rmax_code].
     """
-    total_bits = max(1, code_point, rmin_code, rmax_code).bit_length()
-    total_bits = total_bits + (dims - total_bits % dims)
+    if total_bits is None:
+        total_bits = max(1, code_point, rmin_code, rmax_code).bit_length()
+        total_bits = total_bits + (dims - total_bits % dims)
 
     CODE, MIN, MAX, LITMAX = (xmpz(code_point), xmpz(rmin_code), xmpz(rmax_code), xmpz())
 
@@ -109,7 +105,7 @@ def prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) 
             return int(MAX)
         elif CODE_BIT and not MIN_BIT and MAX_BIT:
             # LITMAX = LOAD("0111...", MAX)
-            LITMAX = MAX.copy()
+            LITMAX[0:total_bits] = MAX[0:total_bits]
             LITMAX[i % dims:i:dims] = 2**(i+1) - 1
             LITMAX[i] = 0
             # MIN = LOAD("10000...", MIN)
@@ -156,7 +152,7 @@ def next_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) 
             continue
         elif not CODE_BIT and not MIN_BIT and MAX_BIT:
             # BIGMIN=LOAD("1000...". MIN)
-            BIGMIN = MIN.copy()
+            BIGMIN[0:total_bits] = MIN[0:total_bits]
             BIGMIN[i % dims:i:dims] = 0
             BIGMIN[i] = 1
             # MAX = LOAD("0111...", MAX)
@@ -183,11 +179,15 @@ def next_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) 
     return int(BIGMIN)
 
 
-def in_range(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3) -> bool:
+def in_range(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3, total_bits:int = None) -> bool:
     if code_point < rmin_code or rmax_code < code_point:
         return False
     elif code_point == rmin_code or code_point == rmax_code:
         return True
     else:
-        return code_point == prev_morton(next_morton(code_point, rmin_code, rmax_code, dims), rmin_code, rmax_code, dims)
+        return code_point == prev_morton(next_morton(code_point, rmin_code, rmax_code, dims, total_bits),
+                                         rmin_code,
+                                         rmax_code,
+                                         dims,
+                                         total_bits)
 
