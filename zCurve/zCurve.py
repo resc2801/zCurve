@@ -8,7 +8,7 @@ def interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> i
     Interlace a given multi-dimensional data point into its 1D Morton code point.
 
     :param data_point:
-         A multi-dimensional data point of unspecified dimensionality to encode.
+        A multi-dimensional data point of unspecified dimensionality to encode.
     :param dims: int, optional
         The dimensionality of the underlying data space.; will speed things up if given.
     :param bits_per_dim: int, optional
@@ -28,12 +28,16 @@ def interlace(*data_point: int, dims: int = None, bits_per_dim: int = None) -> i
 
 
 def par_interlace(data_points: List[List[int]], dims: int = None, bits_per_dim: int = None) -> List[int]:
-    """
+    """Parallelized version of interlace using all available CPU cores.
 
-    :param data_points:
-    :param dims:
-    :param bits_per_dim:
-    :return:
+    :param data_points: List[List[int]]
+        A list of multi-dimensional data points of unspecified dimensionality to encode.
+    :param dims: int, optional
+        The dimensionality of the underlying data space.; will speed things up if given.
+    :param bits_per_dim: int, optional
+        The number of encoding bits per dimension; will speed things up if given.
+    :return: List[int]
+        A list of 1D Morton code points
     """
     from functools import partial
 
@@ -58,6 +62,26 @@ def deinterlace(code_point: int, dims: int = 3, total_bits: int = None) -> List[
     """
     total_bits = code_point.bit_length() + (dims - code_point.bit_length() % dims) if total_bits is None else total_bits
     return [int(xmpz(code_point)[i:total_bits:dims]) for i in range(0, dims)]
+
+
+def par_deinterlace(code_points: List[int], dims: int = 3, total_bits: int = None) -> List[List[int]]:
+    """
+    Parallelized version of deinterlace using all available CPU cores.
+
+    :param code_points: List[int]
+        A list of 1D Morton code points
+    :param dims: int
+        The dimensionality of the underlying data space.
+    :return: List[List[int]]
+        A list of multi-dimensional data points.
+    """
+    from functools import partial
+    _deinterlace = partial(deinterlace, dims=dims, total_bits=total_bits)
+
+    with mp.Pool(mp.cpu_count()) as pool:
+        data_points = pool.map(_deinterlace, code_points, chunksize=None)
+
+    return data_points
 
 
 def prev_morton(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3, total_bits: int = None) -> int:
@@ -190,4 +214,3 @@ def in_range(code_point: int, rmin_code: int, rmax_code: int, dims: int = 3, tot
                                          rmax_code,
                                          dims,
                                          total_bits)
-
